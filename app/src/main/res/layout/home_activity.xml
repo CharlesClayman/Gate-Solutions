@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/homePage_id"
+    tools:context=".HomeActivity">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_id"
+        android:theme="@style/gate"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorBlue">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/toolbarIcon_id"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/default_pic"
+            />
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchSpace_id"
+            android:layout_width="match_parent"
+            app:queryHint="Enter location"
+            android:theme="@style/AppTheme"
+            android:background="@drawable/rounded_ends"
+            android:layout_height="40dp"/>
+
+    </androidx.appcompat.widget.Toolbar>
+    <FrameLayout
+        android:id="@+id/Frame_id"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar_id"
+        android:layout_above="@+id/buttomNav_id"/>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/buttomNav_id"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        app:labelVisibilityMode="labeled"
+
+        app:menu="@menu/buttom_nav_menu"
+        android:background="?android:attr/windowBackground"
+        />
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/colorBlue"
+        android:id="@+id/home_progress_id"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
+</RelativeLayout>

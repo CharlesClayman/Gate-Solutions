@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_id"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="8dp"
+    android:layout_marginStart="2dp"
+    android:layout_marginEnd="2dp"
+    android:layout_marginTop="2dp"
+    app:cardElevation="30dp"
+    android:elevation="30dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/SalesHouseImage_id"
+            android:layout_width="match_parent"
+            android:layout_height="190dp"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:id="@+id/textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/SalesHouseImage_id"
+            android:layout_alignLeft="@id/SalesHouseImage_id"
+            android:text="Photos "
+            android:textSize="13dp"
+            android:drawableEnd="@drawable/ic_camera_alt_black_24dp"
+            android:textColor="@color/colorWhite"
+            android:layout_marginStart="5dp"
+            android:background="@color/colorBlack"
+            />
+        <TextView
+            android:id="@+id/salesPrice_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price"
+            android:layout_alignParentStart="true"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:inputType="textNoSuggestions"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="15dp"
+            android:textColor="@color/colorBlack"
+            android:layout_below="@id/SalesHouseImage_id"
+            />
+        <TextView
+            android:id="@+id/salesLocation_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:drawableLeft="@drawable/ic_location_on_black_24dp"
+            android:layout_alignParentStart="true"
+            android:textSize="12dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorBlack"
+            android:layout_below="@id/salesPrice_id"
+            />
+        <TextView
+            android:id="@+id/salesTime_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time"
+            android:visibility="invisible"
+            android:drawableLeft="@drawable/ic_timer_black_24dp"
+            android:layout_alignParentEnd="true"
+            android:textSize="12dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorBlack"
+            android:layout_below="@+id/salesPrice_id"
+            />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

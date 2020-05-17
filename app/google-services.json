@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "659112119378",
+    "firebase_url": "https://miniproject-44932.firebaseio.com",
+    "project_id": "miniproject-44932",
+    "storage_bucket": "miniproject-44932.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:659112119378:android:d535ac7a8c03fab046638b",
+        "android_client_info": {
+          "package_name": "com.gates.solutions.miniproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "659112119378-4mv3lskqp83rt6pua4ds6fglo7ouf1pi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmPYbpkkrsRwJmeQRaQXShCXeKLSy05eY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "659112119378-4mv3lskqp83rt6pua4ds6fglo7ouf1pi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

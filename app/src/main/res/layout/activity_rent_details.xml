@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorLightAsh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/rent_detail_Toolbar_id"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/gate"
+        android:background="@color/colorBlue"
+        app:title="Details"
+        app:titleTextColor="@color/colorWhite"/>
+    <ScrollView
+        android:id="@+id/scrollview_id"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rent_detail_Toolbar_id"
+        android:layout_above="@id/rent_call_id"
+        android:scrollbars="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ViewFlipper
+                android:id="@+id/rent_ImageFlipper_id"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginBottom="20dp"
+                />
+
+
+            <TextView
+                android:id="@+id/rent_backward_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/rent_ImageFlipper_id"
+                android:layout_marginTop="120dp"
+                android:drawableEnd="@drawable/ic_navigate_before_black_24dp"
+                android:textColor="@color/colorWhite"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="5dp"
+                android:background="@color/colorBlack"
+                />
+            <TextView
+                android:id="@+id/rent_forward_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@id/rent_ImageFlipper_id"
+
+                android:layout_marginTop="120dp"
+                android:layout_alignParentEnd="true"
+                android:drawableEnd="@drawable/ic_navigate_next_black_24dp"
+                android:textColor="@color/colorWhite"
+                android:layout_marginEnd="5dp"
+                android:background="@color/colorBlack"
+                />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/rent_section_Two_id"
+                android:layout_width="match_parent"
+                android:layout_below="@id/rent_ImageFlipper_id"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="20dp"
+                android:elevation="50dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="20dp"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="3" />
+                        <TextView
+                            android:id="@+id/rent_detailsPrice_id"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:layout_weight="1"
+                            android:textColor="@color/colorBlack"
+                            android:text="Price:"
+                            android:textSize="16dp"
+                            android:textStyle="bold"
+                            android:background="@drawable/moneybg"
+                            />
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/rent_detailsWhoPosted_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorBlack"
+                        android:text="Posted by: "
+                        android:paddingBottom="5dp"
+                        />
+                    <TextView
+                        android:id="@+id/rent_details_location_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorBlack"
+                        android:text="Location: "
+                        android:paddingBottom="5dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/rent_detailsTimePosted_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorBlack"
+                        android:text="Posted: "
+                        />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="50dp"
+                android:layout_below="@id/rent_section_Two_id"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="20dp"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="20dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorBlack"
+                        android:text="Description"
+                        android:textStyle="bold"
+                        android:paddingBottom="5dp"
+                        />
+                    <TextView
+                        android:id="@+id/rent_detailsDescription_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorBlack"
+                        android:text="Item description"
+                        android:paddingBottom="5dp"
+                        />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </RelativeLayout>
+    </ScrollView>
+    <LinearLayout
+        android:id="@+id/rent_call_id"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:clickable="true"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorBlue"
+        android:gravity="center"
+        android:orientation="horizontal" >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#0000"
+            android:src="@drawable/call"
+            android:layout_marginRight="5dp"/>
+        <TextView
+            android:id="@+id/rent_detail_Tel_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:textColor="@color/colorWhite"
+            android:textSize="20dp"
+            android:autoLink="phone"
+            android:textColorLink="@color/colorWhite"
+            android:textAllCaps="false"
+            android:text="Call" />
+    </LinearLayout>
+</RelativeLayout>

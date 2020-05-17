@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Mini Project</string>
+    <string name="ShareApp">Share App</string>
+    <string name="ProfilePic">Profile</string>
+    <string name="Logout">logout</string>
+    <string name="OpenDrawer">Open navigation drawer</string>
+    <string name="CloseDrawer">Close navigation drawer</string>
+    <string name="addPhoto">Add photo(s)</string>
+    <string name="AdPostDetails">Details</string>
+    <string name="addContact">Add Contact</string>
+    <string name="addPost">Post</string>
+    <string name="navAddPost">Add Post</string>
+    <string name="applychanges">Apply Changes</string>
+
+</resources>

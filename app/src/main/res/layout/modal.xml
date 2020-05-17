@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorWhite"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/modal_id"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Profile photo"
+        android:textSize="20dp"
+        android:textColor="@color/colorBlack"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="25dp"
+        android:textStyle="bold"
+        android:id="@+id/title_id"
+        />
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="30dp"
+        android:stretchColumns="*"
+        android:fitsSystemWindows="true"
+        android:gravity="center">
+        <TableRow>
+            <TextView
+                android:id="@+id/cameraLayout_id"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:textAlignment="center"
+                android:drawableTop="@drawable/camera"
+                android:textColor="@color/colorBlack"
+                android:text="Camera"
+                />
+            <TextView
+                android:id="@+id/Upload_id"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="0"
+                android:textAlignment="center"
+                android:drawableTop="@drawable/gallery"
+                android:textColor="@color/colorBlack"
+                android:text="Gallery"
+
+                />
+            <TextView
+                android:id="@+id/Remove_id"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="0"
+                android:textAlignment="center"
+                android:drawableTop="@drawable/bin"
+                android:textColor="@color/colorBlack"
+                android:text="Remove photo"
+                />
+        </TableRow>
+    </TableLayout>
+</LinearLayout>

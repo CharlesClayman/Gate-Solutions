@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:fitsSystemWindows="true"
+    android:background="@drawable/bg"
+    android:id="@+id/signUpPage_id"
+    tools:context=".MainActivity">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/signUp_logo_id"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/default_pic"
+        />
+
+
+    <TextView
+        android:id="@+id/appName_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signUp_logo_id"
+        android:text="Gate Solutions"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/colorWhite"
+        android:textSize="15sp"
+        />
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/Username_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appName_id"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/UsernameTxt_id"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:inputType="text"
+            android:drawableLeft="@drawable/ic_person_black_24dp"
+            android:drawablePadding="20dp"
+            android:hint="Username"
+            android:background="@drawable/rounded_ends"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/email_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Username_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/emailTxt_id"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:inputType="textEmailAddress"
+            android:drawableLeft="@drawable/ic_mail_black_24dp"
+            android:drawablePadding="20dp"
+            android:hint="Email"
+            android:background="@drawable/rounded_ends"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/password_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/email_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/passwordTxt_id"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:inputType="textPassword"
+            android:drawableLeft="@drawable/ic_lock_black_24dp"
+            android:drawablePadding="20dp"
+            android:hint="Password"
+            android:background="@drawable/rounded_ends"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/confirmPassword_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/password_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/confirmPassTxt_id"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:inputType="textPassword"
+            android:drawableLeft="@drawable/ic_lock_black_24dp"
+            android:drawablePadding="20dp"
+            android:hint="Confirm Password"
+            android:background="@drawable/rounded_ends"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <Button
+        android:id="@+id/NextBtn_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/confirmPassword_layout"
+        android:layout_marginTop="20dp"
+        android:text="Register"
+        android:background="@drawable/button_dez"
+        />
+
+
+
+
+</RelativeLayout>
