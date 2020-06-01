@@ -52,11 +52,7 @@ public class Add_House extends AppCompatActivity {
     String imageEncoded,SaveCurrentDate,SaveCurrentTime,productRandomKey;
     List<String> imagesEncodedList;
     Uri  restoreImage1,restoreImage2,restoreImage3,restoreImage4,restoreImage5;
-    ImageView First_Image ;
-    ImageView  Second_Image;
-    ImageView Third_Image;
-    ImageView Fourth_Image;
-    ImageView Fifth_Image;
+    ImageView First_Image, Second_Image,Third_Image,Fourth_Image,Fifth_Image ;
     int imageCounter=0;
     AlertDialog alertDialog;
     AlertDialog.Builder builder;
@@ -1235,6 +1231,7 @@ public class Add_House extends AppCompatActivity {
         details.put("Description",Description_EditTxt.getText().toString());
         details.put("Time",SaveCurrentDate);
         details.put("Pid",productRandomKey);
+        details.put("Poster_id",FirebaseAuth.getInstance().getCurrentUser().getUid());
         sales_reference.updateChildren(details).addOnCompleteListener(new OnCompleteListener() {
             @Override
             public void onComplete(@NonNull Task task) {
@@ -1288,6 +1285,7 @@ public class Add_House extends AppCompatActivity {
         details.put("Description",Description_EditTxt.getText().toString());
         details.put("Time",SaveCurrentDate);
         details.put("Pid",productRandomKey);
+        details.put("Poster id",FirebaseAuth.getInstance().getCurrentUser().getUid());
         rent_reference.updateChildren(details).addOnCompleteListener(new OnCompleteListener() {
             @Override
             public void onComplete(@NonNull Task task) {

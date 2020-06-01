@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,10 +26,11 @@ public class RentDetails extends AppCompatActivity implements View.OnClickListen
     TextView poster,location,tel,postTime,desc,Price,next,previous;
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Rent Upload");
     LinearLayout call_layout;
-    private String itemID_rent="",TelNum="";
+    private String itemID_rent="",TelNum="",poster_id;
     ImageView imageView1,imageView2,imageView3,imageView4,imageView5;
     public int imageCounter=0;
     ViewFlipper viewFlipper;
+    LinearLayout chat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class RentDetails extends AppCompatActivity implements View.OnClickListen
         next = findViewById(R.id.rent_forward_id);
         previous = findViewById(R.id.rent_backward_id);
         viewFlipper = findViewById(R.id.rent_ImageFlipper_id);
+        chat = findViewById(R.id.chat_id);
 
         next.setOnClickListener(this);
         previous.setOnClickListener(this);
@@ -56,6 +59,15 @@ public class RentDetails extends AppCompatActivity implements View.OnClickListen
         itemID_rent = getIntent().getStringExtra("rent_pid");
         getProductDetails(itemID_rent);
 
+        chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), messageActivity.class);
+                intent.putExtra("poster id",poster_id);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -74,7 +86,7 @@ public class RentDetails extends AppCompatActivity implements View.OnClickListen
                     desc.setText(sales_items.getDescription());
                     tel.setText(sales_items.getTelephone());
                     Price.setText("GHC "+currencyFormat(sales_items.getPrice()) +" / Month");
-
+                    poster_id = sales_items.getPoster_id();
 
                     if(sales_items.getFirst_Image_Url() != null)
                     {

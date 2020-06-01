@@ -58,7 +58,7 @@ public class Registration  extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Username.getText().toString().isEmpty() && Telephone.getText().toString().isEmpty() && Email.getText().toString().isEmpty() &&
+                if(Username.getText().toString().isEmpty() && Email.getText().toString().isEmpty() &&
                         Password.getText().toString().isEmpty() && Confirm_password.getText().toString().isEmpty()) {
                     Snackbar.make(signUpPage, "Empty fields", Snackbar.LENGTH_SHORT).show();
                 } else if (Username.getText().toString().isEmpty()) {
@@ -87,9 +87,7 @@ public class Registration  extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful())
                             {
-                                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                DatabaseReference myRef = database.getReference("message");
-                                myRef.setValue(Username.getText().toString());
+                                FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Username").setValue(Username.getText().toString());
                                 Toast.makeText(getApplicationContext(),"Successfully registered",Toast.LENGTH_LONG).show();
                                 startActivity(new Intent(Registration.this,MainActivity.class));
                             }else{

@@ -72,6 +72,15 @@ public class MyPost_Fragment extends Fragment {
              //   holder.time.setText(model.getTime());
                 Picasso.get().load(model.getFirst_Image_Url()).into(holder.imageView);
 
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getContext(),maintain_upload.class);
+                        intent.putExtra("post_pid",model.getPid());
+                        startActivity(intent);
+                    }
+                });
+
                 holder.delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

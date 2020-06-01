@@ -17,52 +17,55 @@
         android:focusableInTouchMode="true"
         android:id="@+id/add_PostPage_id"
         android:fitsSystemWindows="true">
-
-        <ImageView
-            android:id="@+id/camera_id"
-            android:layout_width="200dp"
-            android:layout_height="150dp"
-            android:src="@drawable/camera_add"
-            android:layout_centerHorizontal="true"/>
-
-
-        <LinearLayout
-            android:id="@+id/selectedImagesLayout_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="5dp"
-            android:layout_below="@id/camera_id"
-            android:orientation="horizontal">
-
-        </LinearLayout>
-
-
-        <Button
-            android:id="@+id/add_Photo_Btn_id"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/maintain_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_below="@id/selectedImagesLayout_id"
-            android:text="@string/addPhoto"
-            android:textAllCaps="false"
-            android:textSize="20dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
+            android:layout_height="?attr/actionBarSize"
             android:background="@color/colorBlue"
-            android:textColor="@color/colorWhite"/>
+            app:title="Post Details"
+            app:titleTextColor="@color/colorWhite"
+            android:gravity="center"/>
+    <RelativeLayout
+        android:id="@+id/flipper_id"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/maintain_toolbar">
+
+        <ViewFlipper
+            android:id="@+id/rent_ImageFlipper_id"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="5dp"
+            />
+
+
         <TextView
-            android:id="@+id/limit_Txt_id"
+            android:id="@+id/rent_backward_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Limit: 5 pictures"
-            android:textColor="@color/colorBlue"
-            android:layout_below="@+id/add_Photo_Btn_id"
-            android:layout_marginStart="40dp"
+            android:layout_alignStart="@id/rent_ImageFlipper_id"
+            android:layout_marginTop="120dp"
+            android:drawableEnd="@drawable/ic_navigate_before_black_24dp"
+            android:textColor="@color/colorWhite"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="10dp"
+            android:layout_marginStart="5dp"
+            android:background="@color/colorBlack"
             />
+        <TextView
+            android:id="@+id/rent_forward_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/rent_ImageFlipper_id"
+
+            android:layout_marginTop="120dp"
+            android:layout_alignParentEnd="true"
+            android:drawableEnd="@drawable/ic_navigate_next_black_24dp"
+            android:textColor="@color/colorWhite"
+            android:layout_marginEnd="5dp"
+            android:background="@color/colorBlack"
+            />
+
+    </RelativeLayout>
 
         <TextView
             android:id="@+id/title_id"
@@ -70,8 +73,8 @@
             android:layout_height="wrap_content"
             android:text="@string/AdPostDetails"
             android:textColor="@color/colorBlack"
-            android:layout_below="@+id/limit_Txt_id"
-            android:layout_marginTop="5dp"
+            android:layout_below="@+id/flipper_id"
+            android:textStyle="bold"
             android:layout_centerHorizontal="true"
             android:textSize="20sp"/>
         <com.google.android.material.textfield.TextInputLayout
@@ -84,12 +87,13 @@
             android:layout_marginEnd="30dp"
             >
             <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/location_EditTxt_id"
+                android:id="@+id/mypost_location_id"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:drawablePadding="10dp"
-                android:inputType="textAutoComplete"
+                android:inputType="textNoSuggestions"
                 android:hint="Location"
+
                 android:drawableLeft="@drawable/ic_location_on_black_24dp"
                 android:textSize="17sp"
                 />
@@ -105,7 +109,7 @@
             android:layout_marginEnd="30dp"
             >
             <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/price_EditTxt_id"
+                android:id="@+id/mypost_amount_id"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:inputType="numberDecimal"
@@ -126,7 +130,7 @@
             android:layout_marginBottom="10dp"
             >
             <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/telephone_EditTxt_id"
+                android:id="@+id/mypost_tel_id"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:drawablePadding="10dp"
@@ -160,7 +164,7 @@
             >
 
             <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/Description_EditTxt_id"
+                android:id="@+id/mypost_desc_id"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:inputType="textMultiLine"

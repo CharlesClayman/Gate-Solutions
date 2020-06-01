@@ -10,7 +10,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.Manifest;
@@ -67,7 +69,7 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HomeActivity extends AppCompatActivity implements Modal.ButtomSheetListener, SearchView.OnQueryTextListener {
+public class HomeActivity extends AppCompatActivity implements Modal.ButtomSheetListener{
     int bottom_nav_checker;
     DatabaseReference SearchView_ref;
     Dialog dialog;
@@ -85,6 +87,10 @@ public class HomeActivity extends AppCompatActivity implements Modal.ButtomSheet
     private String mProfileImageUrl, SearchInput;
     private ImageView mProfileImage;
     private Uri resultUri,cameraResultUri;
+    private ViewPager viewPager;
+    private ViewPagerAdapter mViewPagerAdapter;
+
+
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference mUser = database.getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -98,6 +104,23 @@ public class HomeActivity extends AppCompatActivity implements Modal.ButtomSheet
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu,menu);
         optionsMenu = menu;
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                ((Sales_Fragment) getSupportFragmentManager().findFragmentById(R.id.salesFragment)).search(query);
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                ((Sales_Fragment) getSupportFragmentManager().findFragmentById(R.id.salesFragment)).search(newText);
+
+                return false;
+            }
+        });
+
         return true;
     }
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -133,6 +156,9 @@ public class HomeActivity extends AppCompatActivity implements Modal.ButtomSheet
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nav_drawer);
 
+        viewPager = findViewById(R.id.view_pager);
+        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(mViewPagerAdapter);
 
         progressBar = findViewById(R.id.home_progress_id);
         profileUpdateProgressBar = findViewById(R.id.NavDrawer_progressBar);
@@ -154,6 +180,7 @@ public class HomeActivity extends AppCompatActivity implements Modal.ButtomSheet
         profileUpdateProgressBar.setVisibility(View.INVISIBLE);
         navEmail.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
+
       /*  mUser.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("username")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -168,6 +195,15 @@ public class HomeActivity extends AppCompatActivity implements Modal.ButtomSheet
                     }
                 });*/
 
+        Intent i = getIntent();
+        String data = i.getStringExtra("update");
+
+        if (data != null && data.contentEquals("1")) {
+            bottomNavigationView.setSelectedItemId(R.id.nav_post_id);
+            bottomNavigationView.getMenu().findItem(R.id.nav_post_id).setChecked(true);
+            viewPager.setCurrentItem(2);
+        }
+
         mUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -178,7 +214,9 @@ public class HomeActivity extends AppCompatActivity implements Modal.ButtomSheet
                     Glide.with(getApplication()).load(mProfileImageUrl).into(drawerPicture);
                     profileUpdateProgressBar.setVisibility(View.GONE);
                 }
-
+                if(dataSnapshot.exists()){
+                    navUsername.setText(map.get("Username").toString());
+                }
 
             }
 
@@ -274,35 +312,68 @@ public class HomeActivity extends AppCompatActivity implements Modal.ButtomSheet
         });
 
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.Frame_id, new Rent_Fragment()).commit();
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        bottomNavigationView.getMenu().findItem(R.id.nav_rent_id).setChecked(true);
+                        break;
+                    case 1:
+                        bottomNavigationView.getMenu().findItem(R.id.nav_sales_id).setChecked(true);
+                        break;
+                    case 2:
+                        bottomNavigationView.getMenu().findItem(R.id.nav_post_id).setChecked(true);
+                        break;
+                    case 3:
+                        bottomNavigationView.getMenu().findItem(R.id.nav_chat_id).setChecked(true);
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Fragment fragment = null;
                 switch (menuItem.getItemId()) {
-                    case R.id.nav_sales_id:
-                        fragment = new Sales_Fragment();
+                    case R.id.nav_rent_id:
+                        viewPager.setCurrentItem(0);
+                        //fragment = new Sales_Fragment();
                         SearchView_ref = FirebaseDatabase.getInstance().getReference().child("Sales Upload");
                         bottom_nav_checker = 1;
                         break;
-                    case R.id.nav_rent_id:
-                        fragment = new Rent_Fragment();
+                    case R.id.nav_sales_id:
+                        viewPager.setCurrentItem(1);
+                        //fragment = new Rent_Fragment();
                         SearchView_ref = FirebaseDatabase.getInstance().getReference().child("Rent Upload");
                         bottom_nav_checker = 2;
                         break;
                     case R.id.nav_post_id:
-                        fragment = new MyPost_Fragment();
+                        viewPager.setCurrentItem(2);
+                       // fragment = new MyPost_Fragment();
                         SearchView_ref = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("uploads");
                         bottom_nav_checker = 3;
                         break;
                     case R.id.nav_chat_id:
-                        fragment = new Chat_Fragment();
+                        viewPager.setCurrentItem(3);
+                     //   fragment = new Chat_Fragment();
                      //   SearchView_ref = FirebaseDatabase.getInstance().getReference().child("Sales Upload");
                         bottom_nav_checker = 4;
                         break;
 
                 }
-                getSupportFragmentManager().beginTransaction().replace(R.id.Frame_id, fragment).commit();
+
                 return true;
             }
         });
@@ -491,7 +562,7 @@ public class HomeActivity extends AppCompatActivity implements Modal.ButtomSheet
     }
 
 
-    @Override
+ /*   @Overridew
     public boolean onQueryTextSubmit(String query) {
         return false;
     }
@@ -538,11 +609,12 @@ public class HomeActivity extends AppCompatActivity implements Modal.ButtomSheet
 
 
         return true;
-    }
+    } */
 
 
     public static String currencyFormat(String amount) {
         DecimalFormat formatter = new DecimalFormat("###,###,##0.00");
         return formatter.format(Double.parseDouble(amount));
     }
+
 }

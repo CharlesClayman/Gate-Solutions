@@ -38,10 +38,11 @@ public class SalesDetails extends AppCompatActivity implements View.OnClickListe
     TextView poster,location,tel,postTime,desc,Price,next,previous;
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Sales Upload");
     LinearLayout call_layout;
-    private String itemID_sales="",TelNum="";
+    private String itemID_sales="",TelNum="",poster_id;
     ImageView imageView1,imageView2,imageView3,imageView4,imageView5;
     public int imageCounter=0;
     ViewFlipper viewFlipper;
+    LinearLayout chat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class SalesDetails extends AppCompatActivity implements View.OnClickListe
         next = findViewById(R.id.forward_id);
         previous = findViewById(R.id.backward_id);
         viewFlipper = findViewById(R.id.ImageFlipper_id);
+        chat = findViewById(R.id.chat_id);
 
         next.setOnClickListener(this);
         previous.setOnClickListener(this);
@@ -69,6 +71,28 @@ public class SalesDetails extends AppCompatActivity implements View.OnClickListe
         itemID_sales = getIntent().getStringExtra("sales_pid");
         getProductDetails(itemID_sales);
 
+       /* FirebaseDatabase.getInstance().getReference().child("Sales Upload").child(itemID_sales).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists())
+                {
+                    poster_id = dataSnapshot.child("Poster id").getValue().toString();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        }); */
+        chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),messageActivity.class);
+                intent.putExtra("poster id",poster_id);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -88,6 +112,7 @@ public class SalesDetails extends AppCompatActivity implements View.OnClickListe
                     desc.setText(sales_items.getDescription());
                     tel.setText(sales_items.getTelephone());
                     Price.setText("GHC "+currencyFormat(sales_items.getPrice()));
+                    poster_id = sales_items.getPoster_id();
 
 
                                 if(sales_items.getFirst_Image_Url() != null)
