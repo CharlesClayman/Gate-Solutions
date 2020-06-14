@@ -28,15 +28,7 @@
         android:fitsSystemWindows="true"
         android:gravity="center">
         <TableRow>
-            <TextView
-                android:id="@+id/cameraLayout_id"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:textAlignment="center"
-                android:drawableTop="@drawable/camera"
-                android:textColor="@color/colorBlack"
-                android:text="Camera"
-                />
+
             <TextView
                 android:id="@+id/Upload_id"
                 android:layout_width="0dp"

@@ -19,7 +19,6 @@ public class myPostViewHolder extends RecyclerView.ViewHolder implements View.On
         imageView = itemView.findViewById(R.id.SalesHouseImage_id);
         location_txt = itemView.findViewById(R.id.salesLocation_id);
         price_txt = itemView.findViewById(R.id.salesPrice_id);
-      //  time = itemView.findViewById(R.id.salesTime_id);
         recyclerView = itemView.findViewById(R.id.recycler_id);
         type = itemView.findViewById(R.id.textview);
         delete = itemView.findViewById(R.id.myPostDelete_id);

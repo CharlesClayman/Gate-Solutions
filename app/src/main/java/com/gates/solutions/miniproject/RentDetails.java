@@ -1,17 +1,27 @@
 package com.gates.solutions.miniproject;
 
+import androidx.appcompat.app.AlertDialog;
+import chat_section.MessageActivity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,12 +35,16 @@ public class RentDetails extends AppCompatActivity implements View.OnClickListen
     Toolbar toolbar;
     TextView poster,location,tel,postTime,desc,Price,next,previous;
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Rent Upload");
-    LinearLayout call_layout;
+    LinearLayout call_chat_layout;
     private String itemID_rent="",TelNum="",poster_id;
     ImageView imageView1,imageView2,imageView3,imageView4,imageView5;
     public int imageCounter=0;
     ViewFlipper viewFlipper;
     LinearLayout chat;
+    RelativeLayout rentDetails_page;
+
+    AlertDialog b;
+    AlertDialog.Builder dialogBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +66,13 @@ public class RentDetails extends AppCompatActivity implements View.OnClickListen
         previous = findViewById(R.id.rent_backward_id);
         viewFlipper = findViewById(R.id.rent_ImageFlipper_id);
         chat = findViewById(R.id.chat_id);
+        call_chat_layout = findViewById(R.id.rent_call_id);
+        rentDetails_page = findViewById(R.id.rentDetails_page);
+
+        if(isNetworkAvailable() == false)
+        {
+            Snackbar.make(rentDetails_page,"No internet connection",Snackbar.LENGTH_LONG).show();
+        }
 
         next.setOnClickListener(this);
         previous.setOnClickListener(this);
@@ -59,15 +80,6 @@ public class RentDetails extends AppCompatActivity implements View.OnClickListen
         itemID_rent = getIntent().getStringExtra("rent_pid");
         getProductDetails(itemID_rent);
 
-        chat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(getApplicationContext(), messageActivity.class);
-                intent.putExtra("poster id",poster_id);
-                startActivity(intent);
-            }
-        });
 
     }
 
@@ -77,6 +89,10 @@ public class RentDetails extends AppCompatActivity implements View.OnClickListen
         reference.child(itemID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(isNetworkAvailable() == false)
+                {
+                    Snackbar.make(rentDetails_page,"No internet connection",Snackbar.LENGTH_LONG).show();
+                }
                 if(dataSnapshot.exists())
                 {
                     final Sales_Items sales_items = dataSnapshot.getValue(Sales_Items.class);
@@ -87,6 +103,23 @@ public class RentDetails extends AppCompatActivity implements View.OnClickListen
                     tel.setText(sales_items.getTelephone());
                     Price.setText("GHC "+currencyFormat(sales_items.getPrice()) +" / Month");
                     poster_id = sales_items.getPoster_id();
+                    poster.setText("Posted by: "+sales_items.getPosted_by());
+
+
+                    if(poster_id.equals( FirebaseAuth.getInstance().getCurrentUser().getUid()))
+                    {
+                        call_chat_layout.setVisibility(View.INVISIBLE);
+                    }else{
+                        chat.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
+                                intent.putExtra("userid",poster_id);
+                                startActivity(intent);
+                            }
+                        });
+                    }
 
                     if(sales_items.getFirst_Image_Url() != null)
                     {
@@ -162,5 +195,14 @@ public class RentDetails extends AppCompatActivity implements View.OnClickListen
         {
             viewFlipper.showPrevious();
         }
+    }
+
+
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

@@ -8,7 +8,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:scrollbarFadeDuration="1"
     android:fillViewport="true"
-
+    android:id="@+id/add_house_page"
     tools:context=".Add_House">
 
     <RelativeLayout
@@ -147,35 +147,15 @@
             android:drawablePadding="10dp"
             android:inputType="numberDecimal"
             android:drawableLeft="@drawable/cedi"
-            android:hint="Amount / month ( Rent only )"
             android:textSize="17sp"
             />
     </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/priceLayout_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/rentLayout_id"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        >
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/price_EditTxt_id"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:inputType="numberDecimal"
-            android:drawablePadding="10dp"
-            android:drawableLeft="@drawable/cedi"
-            android:hint="Amount( for sale only )"
-            android:textSize="17sp"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/contactLayout_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/priceLayout_id"
+        android:layout_below="@id/rentLayout_id"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"

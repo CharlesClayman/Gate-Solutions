@@ -30,38 +30,7 @@
 
 
     </androidx.appcompat.widget.Toolbar>
-    <FrameLayout
-        android:id="@+id/Frame_id"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar_id"
-        android:layout_above="@+id/buttomNav_id">
-        <fragment android:name="com.gates.solutions.miniproject.Sales_Fragment"
-            android:id="@+id/salesFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/toolbar_id"
-            android:layout_above="@+id/buttomNav_id" />
-        <fragment android:name="com.gates.solutions.miniproject.Rent_Fragment"
-            android:id="@+id/rentFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/toolbar_id"
-            android:layout_above="@+id/buttomNav_id" />
-        <fragment android:name="com.gates.solutions.miniproject.MyPost_Fragment"
-            android:id="@+id/postFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/toolbar_id"
-            android:layout_above="@+id/buttomNav_id" />
-        <fragment android:name="com.gates.solutions.miniproject.Chat_Fragment"
-            android:id="@+id/chatFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/toolbar_id"
-            android:layout_above="@+id/buttomNav_id" />
 
-    </FrameLayout>
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
@@ -78,11 +47,5 @@
         app:menu="@menu/buttom_nav_menu"
         android:background="?android:attr/windowBackground"
         />
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminateTint="@color/colorBlue"
-        android:id="@+id/home_progress_id"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"/>
+
 </RelativeLayout>

@@ -8,6 +8,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:scrollbarFadeDuration="1"
     android:fillViewport="true"
+    android:id="@+id/maintenance_page"
     tools:context=".maintain_upload">
 
     <RelativeLayout

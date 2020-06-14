@@ -6,14 +6,18 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.icu.text.SimpleDateFormat;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -23,15 +27,20 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -43,6 +52,7 @@ import java.util.Map;
 
 
 public class Add_House extends AppCompatActivity {
+    ScrollView add_house_page;
     RadioGroup radioGroup;
     RadioButton rentRadioButton,salesRadioButton;
     Button AddPhoto_Btn,Post_Btn;
@@ -60,6 +70,11 @@ public class Add_House extends AppCompatActivity {
     StorageReference postImagesRef;
     DatabaseReference sales_reference,rent_reference,myPost_reference;
 
+    String Poster_name;
+
+    AlertDialog b;
+    AlertDialog.Builder dialogBuilder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,11 +88,11 @@ public class Add_House extends AppCompatActivity {
         Post_Btn = findViewById(R.id.Post_Btn_id);
         location_EditTxt = findViewById(R.id.location_EditTxt_id);
         RPM_EditTxt = findViewById(R.id.rpm_EditTxt_id);
-        Price_EditTxt = findViewById(R.id.price_EditTxt_id);
         Telephone_EditTxt = findViewById(R.id.telephone_EditTxt_id);
         Description_EditTxt = findViewById(R.id.Description_EditTxt_id);
         AddPostPage = findViewById(R.id.add_PostPage_id);
         selectedImagesLayout = findViewById(R.id.selectedImagesLayout_id);
+        add_house_page = findViewById(R.id.add_house_page);
         progressDialog = new ProgressDialog(this);
 
 
@@ -89,7 +104,7 @@ public class Add_House extends AppCompatActivity {
             SimpleDateFormat currentTime = new SimpleDateFormat("HH:MM:SS a");
             SaveCurrentTime = currentTime.format(calendar.getTime());
         }
-        //ends
+        //end
 
         //Generating random keys to identity each upload
         productRandomKey = SaveCurrentDate +" "+ SaveCurrentTime;
@@ -110,28 +125,18 @@ public class Add_House extends AppCompatActivity {
             };
         });
 
-        Price_EditTxt.setEnabled(false);
-        RPM_EditTxt.setEnabled(true);
+
+        RPM_EditTxt.setHint("Amount / month");
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId)
                 {
                     case R.id.rentRadioButton:
-                        if(!Price_EditTxt.toString().isEmpty())
-                        {
-                            Price_EditTxt.setText("");
-                        }
-                        Price_EditTxt.setEnabled(false);
-                        RPM_EditTxt.setEnabled(true);
+                        RPM_EditTxt.setHint("Amount / month");
                         break;
                     case R.id.salesRadioButton:
-                        if(!RPM_EditTxt.toString().isEmpty())
-                        {
-                            RPM_EditTxt.setText("");
-                        }
-                        RPM_EditTxt.setEnabled(false);
-                        Price_EditTxt.setEnabled(true);
+                        RPM_EditTxt.setHint("Selling price");
                         break;
                 }
             }
@@ -142,11 +147,52 @@ public class Add_House extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                  validateAddPostDate();
+                if(isNetworkAvailable() == false)
+                {
+                    Snackbar.make(add_house_page,"No internet connection",Snackbar.LENGTH_LONG).show();
+                }else {
+                    if(selectedImagesLayout.getChildCount() == 0)
+                    {
+                        Toast.makeText(getApplicationContext(),"No image selected",Toast.LENGTH_SHORT).show();
+                        return;
+                    }else if(location_EditTxt.getText().toString().isEmpty())
+                    {
+                        Toast.makeText(getApplicationContext(),"No location specified",Toast.LENGTH_SHORT).show();
+                        return;
+                    }else if(RPM_EditTxt.getText().toString().isEmpty() && Price_EditTxt.getText().toString().isEmpty())
+                    {
+                        Toast.makeText(getApplicationContext(),"No amount specified",Toast.LENGTH_SHORT).show();
+                        return;
+                    }else if(Telephone_EditTxt.getText().toString().isEmpty())
+                    {
+                        Toast.makeText(getApplicationContext(),"No telephone specified",Toast.LENGTH_SHORT).show();
+                        return;
+                    }else if(Description_EditTxt.getText().toString().isEmpty())
+                    {
+                        Toast.makeText(getApplicationContext(),"No description specified",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    else{
+                        ShowProgressDialog();
+                        validateAddPostDate();
+                    }
+
+                }
             }
         });
 
+        FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Poster_name = dataSnapshot.child("username").getValue().toString();
+                    }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
 
@@ -862,10 +908,29 @@ public class Add_House extends AppCompatActivity {
 
     private void storeHouseInformation( )
     {
-        progressDialog.setTitle("Adding New Post");
-        progressDialog.setMessage("Please wait ...");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
+        for(int j=0;j<3; j++)
+        {
+            if(restoreImage1 == null && restoreImage2 != null)
+            {
+                restoreImage1 = restoreImage2;
+                restoreImage2 = null;
+            }
+            if(restoreImage2 == null && restoreImage3 != null)
+            {
+                restoreImage2 = restoreImage3;
+                restoreImage3 = null;
+            }
+            if(restoreImage3 == null && restoreImage4 != null)
+            {
+                restoreImage3 = restoreImage4;
+                restoreImage4 = null;
+            }
+            if(restoreImage4 == null && restoreImage5 != null)
+            {
+                restoreImage4 = restoreImage5;
+                restoreImage5 = null;
+            }
+        }
 
         if(salesRadioButton.isChecked())
         {
@@ -1215,9 +1280,7 @@ public class Add_House extends AppCompatActivity {
             }
             Rent_saveUploadDetails();
             progressDialog.dismiss();
-      /*  Toast toast = Toast.makeText(getApplicationContext(), "Upload complete", Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();*/
+
         }
     }
 
@@ -1226,29 +1289,31 @@ public class Add_House extends AppCompatActivity {
         Map details = new HashMap();
         details.put("Type","Sales Upload");
         details.put("Location",location_EditTxt.getText().toString());
-        details.put("Price",Price_EditTxt.getText().toString());
+        details.put("Price",RPM_EditTxt.getText().toString());
         details.put("Telephone",Telephone_EditTxt.getText().toString());
         details.put("Description",Description_EditTxt.getText().toString());
         details.put("Time",SaveCurrentDate);
         details.put("Pid",productRandomKey);
         details.put("Poster_id",FirebaseAuth.getInstance().getCurrentUser().getUid());
+        details.put("Posted_by",Poster_name);
         sales_reference.updateChildren(details).addOnCompleteListener(new OnCompleteListener() {
             @Override
             public void onComplete(@NonNull Task task) {
                 if(task.isSuccessful())
                 {
                     startActivity(new Intent(Add_House.this,HomeActivity.class));
-                    progressDialog.dismiss();
+                    HideProgressDialog();
                     Toast.makeText(getApplicationContext(),"Details uploaded successfully...",Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    HideProgressDialog();
                     Toast.makeText(getApplicationContext(),"Error:"+task.getException().getMessage(),Toast.LENGTH_SHORT).show();
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                progressDialog.dismiss();
+                HideProgressDialog();
                 Toast.makeText(getApplicationContext(),"Error:"+e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
@@ -1258,18 +1323,20 @@ public class Add_House extends AppCompatActivity {
             public void onComplete(@NonNull Task task) {
                 if(task.isSuccessful())
                 {
+
                     startActivity(new Intent(Add_House.this,HomeActivity.class));
-                    progressDialog.dismiss();
+                    HideProgressDialog();
                     Toast.makeText(getApplicationContext(),"Details uploaded successfully...",Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    HideProgressDialog();
                     Toast.makeText(getApplicationContext(),"Error:"+task.getException().getMessage(),Toast.LENGTH_SHORT).show();
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                progressDialog.dismiss();
+                HideProgressDialog();
                 Toast.makeText(getApplicationContext(),"Error:"+e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
@@ -1285,24 +1352,27 @@ public class Add_House extends AppCompatActivity {
         details.put("Description",Description_EditTxt.getText().toString());
         details.put("Time",SaveCurrentDate);
         details.put("Pid",productRandomKey);
-        details.put("Poster id",FirebaseAuth.getInstance().getCurrentUser().getUid());
+        details.put("Poster_id",FirebaseAuth.getInstance().getCurrentUser().getUid());
+        details.put("Posted_by",Poster_name);
         rent_reference.updateChildren(details).addOnCompleteListener(new OnCompleteListener() {
             @Override
             public void onComplete(@NonNull Task task) {
                 if(task.isSuccessful())
                 {
+
                     startActivity(new Intent(Add_House.this,HomeActivity.class));
-                    progressDialog.dismiss();
+                    HideProgressDialog();
                     Toast.makeText(getApplicationContext(),"Details uploaded successfully...",Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    HideProgressDialog();
                     Toast.makeText(getApplicationContext(),"Error:"+task.getException().getMessage(),Toast.LENGTH_SHORT).show();
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                progressDialog.dismiss();
+                HideProgressDialog();
                 Toast.makeText(getApplicationContext(),"Error:"+e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
@@ -1312,22 +1382,44 @@ public class Add_House extends AppCompatActivity {
             public void onComplete(@NonNull Task task) {
                 if(task.isSuccessful())
                 {
+
                     startActivity(new Intent(Add_House.this,HomeActivity.class));
-                    progressDialog.dismiss();
+                    HideProgressDialog();
                     Toast.makeText(getApplicationContext(),"Details uploaded successfully...",Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    HideProgressDialog();
                     Toast.makeText(getApplicationContext(),"Error:"+task.getException().getMessage(),Toast.LENGTH_SHORT).show();
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                progressDialog.dismiss();
+                HideProgressDialog();
                 Toast.makeText(getApplicationContext(),"Error:"+e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public void ShowProgressDialog() {
+        dialogBuilder = new AlertDialog.Builder(Add_House.this);
+        View dialogView =  LayoutInflater.from(Add_House.this).inflate(R.layout.progress_dialog_layout, null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setCancelable(false);
+        b = dialogBuilder.create();
+        b.show();
+    }
+
+    public void HideProgressDialog(){
+
+        b.dismiss();
+    }
 }
 

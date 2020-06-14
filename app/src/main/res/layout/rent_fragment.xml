@@ -14,4 +14,19 @@
         android:scrollbars="vertical">
 
     </androidx.recyclerview.widget.RecyclerView>
+    <TextView
+        android:id="@+id/no_rent_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="50sp"
+        android:text="No Rent"/>
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/colorBlue"
+        android:id="@+id/rent_progress_id"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
 </RelativeLayout>

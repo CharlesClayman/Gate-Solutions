@@ -4,13 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         signInBtn = findViewById(R.id.signInBtn_id);
         forgotPasswordTxt = findViewById(R.id.forgotPassword_id);
         signUpTxt = findViewById(R.id.signUptxt_id);
@@ -41,6 +46,11 @@ public class MainActivity extends AppCompatActivity {
         signInPage = findViewById(R.id.signInPage_id);
         progressBar = findViewById(R.id.signIn_Prog_id);
         progressBar.setVisibility(View.GONE);
+
+        if(isNetworkAvailable() == false)
+        {
+            Snackbar.make(signInPage,"No internet connection",Snackbar.LENGTH_LONG).show();
+        }
 
         firebaseAuth = FirebaseAuth.getInstance();
         stateListener = new FirebaseAuth.AuthStateListener() {
@@ -57,71 +67,77 @@ public class MainActivity extends AppCompatActivity {
         signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                if(userEmail.getText().toString().isEmpty())
+                if(isNetworkAvailable() == false)
                 {
-                    progressBar.setVisibility(View.GONE);
-                    final Snackbar snackbar= Snackbar.make(signInPage,"Email field is empty",Snackbar.LENGTH_SHORT);
-                    snackbar.show();
-                    snackbar.setAction("OK", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            snackbar.dismiss();
-                        }
-                    });
-                    userEmail.requestFocus();
-                }
-                else if(userPassword.getText().toString().isEmpty())
-                {
-                    progressBar.setVisibility(View.GONE);
-                    final Snackbar snackbar = Snackbar.make(signInPage,"Password field is empty",Snackbar.LENGTH_SHORT);
-                    snackbar.show();
-                    snackbar.setAction("OK", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            snackbar.dismiss();
-                        }
-                    });
-                    userPassword.requestFocus();
-                }
-                else if(userPassword.getText().toString().isEmpty() && userPassword.getText().toString().isEmpty())
-                {
-                    progressBar.setVisibility(View.GONE);
-                    final Snackbar snackbar = Snackbar.make(signInPage,"Empty fields",Snackbar.LENGTH_SHORT);
-                    snackbar.setAction("OK", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            snackbar.dismiss();
-                        }
-                    });
-                    userEmail.requestFocus();
+                    Snackbar.make(signInPage,"No internet connection",Snackbar.LENGTH_LONG).show();
                 }else {
-                    firebaseAuth.signInWithEmailAndPassword(userEmail.getText().toString(), userPassword.getText().toString())
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        progressBar.setVisibility(View.GONE);
-                                        startActivity(new Intent(MainActivity.this, HomeActivity.class));
-                                    } else {
-                                        Snackbar.make(signInPage, "Network failure...try again", Snackbar.LENGTH_LONG).show();
-                                    }
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Snackbar.make(signInPage, "Email or password is incorrect", Snackbar.LENGTH_LONG).show();
-                                }
-                            });
-                }
 
+                    progressBar.setVisibility(View.VISIBLE);
+                    if (userEmail.getText().toString().isEmpty()) {
+                        progressBar.setVisibility(View.GONE);
+                        final Snackbar snackbar = Snackbar.make(signInPage, "Email field is empty", Snackbar.LENGTH_SHORT);
+                        snackbar.show();
+                        snackbar.setAction("OK", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                snackbar.dismiss();
+                            }
+                        });
+                        userEmail.requestFocus();
+                    } else if (userPassword.getText().toString().isEmpty()) {
+                        progressBar.setVisibility(View.GONE);
+                        final Snackbar snackbar = Snackbar.make(signInPage, "Password field is empty", Snackbar.LENGTH_SHORT);
+                        snackbar.show();
+                        snackbar.setAction("OK", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                snackbar.dismiss();
+                            }
+                        });
+                        userPassword.requestFocus();
+                    } else if (userPassword.getText().toString().isEmpty() && userPassword.getText().toString().isEmpty()) {
+                        progressBar.setVisibility(View.GONE);
+                        final Snackbar snackbar = Snackbar.make(signInPage, "Empty fields", Snackbar.LENGTH_SHORT);
+                        snackbar.setAction("OK", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                snackbar.dismiss();
+                            }
+                        });
+                        userEmail.requestFocus();
+                    } else {
+                        firebaseAuth.signInWithEmailAndPassword(userEmail.getText().toString(), userPassword.getText().toString())
+                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+                                            progressBar.setVisibility(View.GONE);
+                                            startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                                        } else {
+                                            Snackbar.make(signInPage, "Network failure...try again", Snackbar.LENGTH_LONG).show();
+                                        }
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        progressBar.setVisibility(View.GONE);
+                                        Snackbar.make(signInPage, "Email or password is incorrect", Snackbar.LENGTH_LONG).show();
+                                    }
+                                });
+                    }
+                }
                 forgotPasswordTxt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        if(userEmail.getText().toString().isEmpty()){
+                        if(isNetworkAvailable() == false)
+                        {
+                            Snackbar.make(signInPage,"No internet connection",Snackbar.LENGTH_LONG).show();
+                        }else {
+
+                            if(userEmail.getText().toString().isEmpty()){
                             Snackbar.make(signInPage,"Enter Email",Snackbar.LENGTH_LONG).show();
                             userEmail.requestFocus();
                         }else{
@@ -143,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
                         }
-
+                        }
                     }
                 });
             }
@@ -164,4 +180,11 @@ public class MainActivity extends AppCompatActivity {
         firebaseAuth.addAuthStateListener(stateListener);
     }
 
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 }

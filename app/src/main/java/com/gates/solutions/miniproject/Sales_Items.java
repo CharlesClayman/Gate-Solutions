@@ -2,7 +2,7 @@ package com.gates.solutions.miniproject;
 
 public class Sales_Items
 {
-   private String Type,username,Location,Poster_id,Pid,Price,Time,Description,Telephone,First_Image_Url,Second_Image_Url,Third_Image_Url,Fourth_Image_Url,Fifth_Image_Url,profile_Image_Url;
+   private String Type,username,Location,Poster_id,Pid,Price,Time,Description,Telephone,First_Image_Url,Second_Image_Url,Third_Image_Url,Fourth_Image_Url,Fifth_Image_Url,profile_Image_Url,Posted_by;
 
     public Sales_Items()
     {
@@ -10,8 +10,10 @@ public class Sales_Items
     }
 
 
-    public Sales_Items(String type,String Poster_id,String username,String location, String pid, String price, String time, String description, String telephone, String first_Image_Url, String second_Image_Url,
+    public Sales_Items(String Post_by,String type,String Poster_id,String username,String location, String pid, String price, String time, String description, String telephone, String first_Image_Url, String second_Image_Url,
                        String third_Image_Url, String fourth_Image_Url, String fifth_Image_Url,String profile_Image_Url) {
+
+        this.Posted_by = Post_by;
         this.Type = type;
         this.Poster_id = Poster_id;
         this.username = username;
@@ -149,5 +151,13 @@ public class Sales_Items
 
     public void setFirst_Image_Url(String first_Image_Url) {
         First_Image_Url = first_Image_Url;
+    }
+
+    public String getPosted_by() {
+        return Posted_by;
+    }
+
+    public void setPosted_by(String posted_by) {
+        Posted_by = posted_by;
     }
 }

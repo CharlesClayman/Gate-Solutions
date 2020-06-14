@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gates.solutions.miniproject">
 
-    <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -15,13 +15,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".messageActivity"/>
+        <activity android:name="chat_section.MessageActivity"/>
         <activity android:name=".maintain_upload" />
-        <activity android:name=".RentDetails" />
+        <activity android:name=".RentDetails" android:parentActivityName=".HomeActivity"  />
         <activity
             android:name=".SalesDetails"
             android:parentActivityName=".HomeActivity" />
-        <activity android:name=".Add_House" />
+        <activity android:name=".Add_House"  />
         <activity android:name=".Sales_Fragment" />
         <activity android:name=".Chat_Fragment" />
         <activity android:name=".MyPost_Fragment" />

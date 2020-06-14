@@ -8,4 +8,6 @@
     <color name="colorBlue">#303F9F</color>
     <color name="colorBlack">#000000</color>
     <color name="colorLightAsh">#eeeeee</color>
+    <color name="colorChat">#dddddd</color>
+    <color name="colorOnline">#05df29</color>
 </resources>

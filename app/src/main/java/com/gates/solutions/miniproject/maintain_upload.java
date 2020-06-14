@@ -5,15 +5,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,6 +40,7 @@ public class maintain_upload extends AppCompatActivity implements View.OnClickLi
     public int imageCounter=0;
     private String itemID_Post="",uplaod_type;
     BottomNavigationView bottomNavigationView;
+    ScrollView maintenance_page;
 
 
     @Override
@@ -51,10 +58,15 @@ public class maintain_upload extends AppCompatActivity implements View.OnClickLi
         viewFlipper = findViewById(R.id.rent_ImageFlipper_id);
         bottomNavigationView = findViewById(R.id.buttomNav_id);
         toolbar = findViewById(R.id.maintain_toolbar);
+        maintenance_page = findViewById(R.id.maintenance_page);
 
         setSupportActionBar(toolbar);
 
 
+        if(isNetworkAvailable() == false)
+        {
+            Snackbar.make(maintenance_page,"No internet connection",Snackbar.LENGTH_LONG).show();
+        }
 
         next.setOnClickListener(this);
         previous.setOnClickListener(this);
@@ -65,30 +77,26 @@ public class maintain_upload extends AppCompatActivity implements View.OnClickLi
         ApplyChanges_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if(location_txt.getText().toString().isEmpty() )
+                if(isNetworkAvailable() == false)
                 {
-                    Toast.makeText(getApplicationContext(),"No location specified",Toast.LENGTH_SHORT).show();
-                }
-                else if(amount_txt.getText().toString().isEmpty())
-                {
-                    Toast.makeText(getApplicationContext(),"No amount specified",Toast.LENGTH_SHORT).show();
-                }
-                else if( tel_txt.getText().toString().isEmpty())
-                {
-                    Toast.makeText(getApplicationContext(),"No telephone number specified",Toast.LENGTH_SHORT).show();
-                }
-                else if(description_txt.getText().toString().isEmpty())
-                {
-                    Toast.makeText(getApplicationContext(),"No description specified",Toast.LENGTH_SHORT).show();
+                    Snackbar.make(maintenance_page,"No internet connection",Snackbar.LENGTH_LONG).show();
                 }else {
+
+                if (location_txt.getText().toString().isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "No location specified", Toast.LENGTH_SHORT).show();
+                } else if (amount_txt.getText().toString().isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "No amount specified", Toast.LENGTH_SHORT).show();
+                } else if (tel_txt.getText().toString().isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "No telephone number specified", Toast.LENGTH_SHORT).show();
+                } else if (description_txt.getText().toString().isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "No description specified", Toast.LENGTH_SHORT).show();
+                } else {
                     //my post
                     FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("uploads").child(itemID_Post).child("Telephone").setValue(tel_txt.getText().toString());
                     FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("uploads").child(itemID_Post).child("Price").setValue(amount_txt.getText().toString());
                     FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("uploads").child(itemID_Post).child("Description").setValue(description_txt.getText().toString());
                     FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("uploads").child(itemID_Post).child("Location").setValue(location_txt.getText().toString());
-                    switch (uplaod_type)
-                    {
+                    switch (uplaod_type) {
                         case "Sales Upload":
                             FirebaseDatabase.getInstance().getReference().child("Sales Upload").child(itemID_Post).child("Telephone").setValue(tel_txt.getText().toString());
                             FirebaseDatabase.getInstance().getReference().child("Sales Upload").child(itemID_Post).child("Price").setValue(amount_txt.getText().toString());
@@ -103,13 +111,13 @@ public class maintain_upload extends AppCompatActivity implements View.OnClickLi
                             break;
                     }
 
-                    Toast.makeText(getApplicationContext(),"Post updated successfully",Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(maintain_upload.this,HomeActivity.class);
+                    Toast.makeText(getApplicationContext(), "Post updated successfully", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(maintain_upload.this, HomeActivity.class);
                     intent.putExtra("update", "1");
                     startActivity(intent);
 
-
                 }
+            }
             }
         });
 
@@ -123,6 +131,10 @@ public class maintain_upload extends AppCompatActivity implements View.OnClickLi
         reference.child(itemID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(isNetworkAvailable() == false)
+                {
+                    Snackbar.make(maintenance_page,"No internet connection",Snackbar.LENGTH_LONG).show();
+                }
                 if(dataSnapshot.exists())
                 {
                     final Sales_Items sales_items = dataSnapshot.getValue(Sales_Items.class);
@@ -203,5 +215,12 @@ public class maintain_upload extends AppCompatActivity implements View.OnClickLi
         {
             viewFlipper.showPrevious();
         }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
