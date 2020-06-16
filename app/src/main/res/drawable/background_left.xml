@@ -1,4 +1,10 @@
-<component name="libraryTable">
-    <library name="Gradle: com.github.bumptech.glide:annotations:4.10.0@jar">
-        <CLASSES>
-            <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.bumptech.glide/annotations/4.10.0/bbe80fe87e3a3a08c995557f3b8e66f479
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners
+        android:radius="10dp"
+        android:topRightRadius="0dp" />
+
+    <solid android:color="@color/colorWhite" />
+
+</shape>

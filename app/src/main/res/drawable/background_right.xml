@@ -1,5 +1,10 @@
-<component name="libraryTable">
-    <library name="Gradle: androidx.test:monitor:1.2.0@aar">
-        <CLASSES>
-            <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6ca3eca346273a8ecd7cdf6f928b5ad8/monitor-1.2.0/jars/classes.jar!/" />
-            <root url="file:
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners
+        android:radius="10dp"
+        android:topRightRadius="0dp" />
+
+    <solid android:color="@color/colorBlue" />
+
+</shape>
